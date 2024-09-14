@@ -1,16 +1,41 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { useState } from "react";
+import { Camera, useCameraDevice, useCameraPermission, useCodeScanner, Code } from "react-native-vision-camera";
+import Barcode from "react-native-barcode-builder";
+ 
+export default function CameraScreen() {
+  const device = useCameraDevice('back')
+  const [barcodes, setBarcodes] = useState<string[]>([])
+  const { hasPermission, requestPermission } = useCameraPermission()
+  let iteration = 0
+  const codeScanner = useCodeScanner({
+    codeTypes: ['ean-13'],
+    onCodeScanned: (codes: Code[]) => {
+      codes.forEach((c: Code) => {
+        const {value} = c
+        if(!value || value.length < 13 || barcodes.includes(value)) return
+        console.log("EAN") 
+        console.log(c.value)
+        console.log(iteration)
+        iteration++
+        setBarcodes([...barcodes, value])
+      })
+    }
+  })
+  if (!hasPermission) {
+    requestPermission()
+    return <Text>Les permissions n'ont pas été accordées</Text>
+  }
+  if (device == null) return <Text>Aucune caméra disponible</Text>
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-
-export default function TabTwoScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
-  );
+    <Camera
+      style={StyleSheet.absoluteFill}
+      device={device}
+      isActive={true}
+      codeScanner={codeScanner}
+    />
+  )
 }
 
 const styles = StyleSheet.create({
@@ -18,14 +43,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });
