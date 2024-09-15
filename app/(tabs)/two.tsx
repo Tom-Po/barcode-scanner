@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text } from "react-native";
+import { Button, StyleSheet, Text, ScrollView } from "react-native";
 import { useState } from "react";
 import {
   Camera,
@@ -43,20 +43,33 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      {barcodes.map((b) => (
-        <View style={styles.barcodeWrapper}>
-          <BarcodeCreatorView
-            background={"#FFF"}
-            foregroundColor={"#000"}
-            value={b}
-            format={BarcodeFormat.EAN13}
-            style={styles.barcode}
-          />
-          <Text>{b}</Text>
-        </View>
-      ))}
+      <View style={styles.barcodeList}>
+        <ScrollView style={styles.scrollView}>
+          {barcodes.map((b) => (
+            <View key={b} style={styles.barcodeItem}>
+              <View style={styles.barcodeWrapper}>
+                <BarcodeCreatorView
+                  background={"#FFF"}
+                  foregroundColor={"#000"}
+                  value={b}
+                  format={BarcodeFormat.EAN13}
+                  style={styles.barcode}
+                />
+                <Text>{b}</Text>
+              </View>
+              <View style={styles.buttonBar}>
+                <Button
+                  style={styles.barcodeDeleteButton}
+                  title="delete"
+                  onPress={() => removeBarcode(b)}
+                />
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
       <Camera
-        style={[StyleSheet.absoluteFill, { height: "50%", top: "unset" }]}
+        style={[StyleSheet.absoluteFill, { height: "50%", bottom: "unset" }]}
         device={device}
         isActive={true}
         codeScanner={codeScanner}
@@ -66,8 +79,31 @@ export default function CameraScreen() {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  buttonBar: {
+    paddingRight: 10,
+  },
+  barcodeList: {
+    backgroundColor: "#DDD",
+    maxHeight: "50%",
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    marginTop: "100%",
+    paddingBottom: 30,
+  },
+  barcodeItem: {
+    padding: 5,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 5,
+    marginBottom: 5,
+  },
   barcodeWrapper: {
-    padding: 4,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -75,6 +111,11 @@ const styles = StyleSheet.create({
   barcode: {
     width: 200,
     height: 50,
+  },
+  barcodeDeleteButton: {
+    position: "absolute",
+    top: 0,
+    right: 0,
   },
   container: {
     flex: 1,
