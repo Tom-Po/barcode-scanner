@@ -10,25 +10,29 @@ type ProductType = {
   ean13: EAN13,
   name: string
 }
+// TODO : Redux parce que les contextes voila
+// un peu de style 
+// un peu d'audace
+// un peu de check sur la consomation de batterie aussi visiblement
 
-const CodeContext = createContext([]);
+// const CodeContext = createContext([]);
 
-const CodeProvider = (props: {children: ReactNode}) => {
-  const [codes, setCodes] = useState<Code[]>([]);
+// const CodeProvider = (props: {children: ReactNode}) => {
+//   const [codes, setCodes] = useState<Code[]>([]);
 
-  const addCode = (code: Code) => {
-    setCodes((prevCodes) => [...prevCodes, code]);
-  };
-  const codeContext = {
-    codesContext : codes,
-    addCode: (code: Code) => addCode(code)
-  }
-  return (
-    <CodeContext.Provider value={codeContext}>
-      {props.children}
-    </CodeContext.Provider>
-  );
-};
+//   const addCode = (code: Code) => {
+//     setCodes((prevCodes) => [...prevCodes, code]);
+//   };
+//   const codeContext = {
+//     codesContext : codes,
+//     addCode: (code: Code) => addCode(code)
+//   }
+//   return (
+//     <CodeContext.Provider value={codeContext}>
+//       {props.children}
+//     </CodeContext.Provider>
+//   );
+// };
 
 export default function TabOneScreen() {
   const products: ProductType[] = [{
