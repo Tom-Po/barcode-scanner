@@ -1,56 +1,17 @@
-import { createContext, useState, ReactNode } from "react";
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "@/components/Themed";
-import { Code } from "react-native-vision-camera";
-type EAN13 = number;
-
-type ProductType = {
-  id: number;
-  ean13: EAN13;
-  name: string;
-};
-// TODO : Redux parce que les contextes voila
-// un peu de style
-// un peu d'audace
-// un peu de check sur la consomation de batterie aussi visiblement
-
-// const CodeContext = createContext([]);
-
-// const CodeProvider = (props: {children: ReactNode}) => {
-//   const [codes, setCodes] = useState<Code[]>([]);
-
-//   const addCode = (code: Code) => {
-//     setCodes((prevCodes) => [...prevCodes, code]);
-//   };
-//   const codeContext = {
-//     codesContext : codes,
-//     addCode: (code: Code) => addCode(code)
-//   }
-//   return (
-//     <CodeContext.Provider value={codeContext}>
-//       {props.children}
-//     </CodeContext.Provider>
-//   );
-// };
+import { useAppSelector } from "../hooks";
+import { RootState } from "../store";
+import { Link } from "expo-router";
+import Barcode from "@/components/Barcode";
 
 export default function TabOneScreen() {
-  const products: ProductType[] = [
-    {
-      id: 0,
-      ean13: 5430000384308,
-      name: "1637 blond 40G",
-    },
-    {
-      id: 1,
-      ean13: 3535800003045,
-      name: "Crêpes Dentelle Chocolat au lait",
-    },
-  ];
+  const products = useAppSelector((state: RootState) => state.products.value);
+  console.log(products);
+
   return (
-    //  <ProductContext.Provider value={initialData}>
     <View style={styles.container}>
-      <Text style={styles.title}>Liste produits</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -58,14 +19,24 @@ export default function TabOneScreen() {
       />
       <View style={styles.productList}>
         <Text style={styles.title}>Liste des produits</Text>
+        {products.length === 0 && (
+          <View>
+            <Text>Aucun produit</Text>
+            <View style={styles.buttonStyle}>
+              <Link style={styles.link} href="/camera">
+                Scanner des produits
+              </Link>
+            </View>
+          </View>
+        )}
         {products.map((p) => (
-          <Text key={"productkey-" + p.id} style={styles.productListItem}>
-            {p.name} - {p.ean13}
-          </Text>
+          <>
+            <Text>{p}</Text>
+            <Barcode code={p} />
+          </>
         ))}
       </View>
     </View>
-    //  </ProductContext.Provider>
   );
 }
 
@@ -73,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "stretch",
-    paddingTop: 20,
   },
   title: {
     fontSize: 20,
@@ -82,7 +52,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   separator: {
-    marginVertical: 30,
     height: 1,
     width: "80%",
   },
@@ -94,5 +63,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingTop: 3,
     paddingBottom: 3,
+  },
+  link: {
+    color: "white",
+    fontSize: 15,
+  },
+  buttonStyle: {
+    padding: 10,
+    backgroundColor: "blue",
+    display: "flex",
+    alignItems: "center",
   },
 });

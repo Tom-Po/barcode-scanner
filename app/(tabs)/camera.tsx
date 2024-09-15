@@ -1,4 +1,10 @@
-import { Button, StyleSheet, Text, ScrollView } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useState } from "react";
 import {
   Camera,
@@ -12,26 +18,33 @@ import {
   BarcodeFormat,
 } from "react-native-barcode-creator";
 import { View } from "@/components/Themed";
+import { useAppSelector } from "../hooks";
+import { useDispatch } from "react-redux";
+import { addProduct, removeProduct } from "../productSlice";
+import Barcode from "@/components/Barcode";
 
 export default function CameraScreen() {
-  const device = useCameraDevice("back");
-  const [barcodes, setBarcodes] = useState<string[]>(["3057067573012"]);
+  const [activeBarcode, setActiveBarcode] = useState("");
+  const products = useAppSelector((state) => state.products.value);
+  const dispatch = useDispatch();
+
   const { hasPermission, requestPermission } = useCameraPermission();
+  const device = useCameraDevice("back");
   const codeScanner = useCodeScanner({
     codeTypes: ["ean-13"],
     onCodeScanned: (codes: Code[]) => {
       codes.forEach((c: Code) => {
         const { value } = c;
-        if (!value || value.length < 13 || barcodes.includes(value)) return;
+        if (!value || value.length < 13 || products.includes(value)) return;
         console.log("EAN");
         console.log(c.value);
-        setBarcodes([...barcodes, value]);
+        dispatch(addProduct(value));
       });
     },
   });
 
   const removeBarcode = (code: string) => {
-    setBarcodes(barcodes.filter((b) => b !== code));
+    dispatch(removeProduct(code));
   };
 
   if (!hasPermission) {
@@ -39,32 +52,33 @@ export default function CameraScreen() {
     return <Text>Les permissions n'ont pas été accordées</Text>;
   }
   if (device == null) return <Text>Aucune caméra disponible</Text>;
-  console.log(barcodes);
+  console.log(products);
 
   return (
     <View style={styles.container}>
       <View style={styles.barcodeList}>
         <ScrollView style={styles.scrollView}>
-          {barcodes.map((b) => (
-            <View key={b} style={styles.barcodeItem}>
+          {products.map((b) => (
+            <TouchableOpacity
+              key={b}
+              style={styles.barcodeItem}
+              onPress={() => setActiveBarcode(b)}
+              activeOpacity={1}
+            >
               <View style={styles.barcodeWrapper}>
-                <BarcodeCreatorView
-                  background={"#FFF"}
-                  foregroundColor={"#000"}
-                  value={b}
-                  format={BarcodeFormat.EAN13}
-                  style={styles.barcode}
-                />
+                <Barcode code={b} />
                 <Text>{b}</Text>
               </View>
-              <View style={styles.buttonBar}>
-                <Button
-                  style={styles.barcodeDeleteButton}
-                  title="delete"
-                  onPress={() => removeBarcode(b)}
-                />
-              </View>
-            </View>
+              {activeBarcode === b && (
+                <View style={styles.buttonBar}>
+                  <Button
+                    style={styles.barcodeDeleteButton}
+                    title="Effacer"
+                    onPress={() => removeBarcode(b)}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -102,15 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 5,
     marginBottom: 5,
+    backgroundColor: "#FFF",
   },
   barcodeWrapper: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  barcode: {
-    width: 200,
-    height: 50,
   },
   barcodeDeleteButton: {
     position: "absolute",
