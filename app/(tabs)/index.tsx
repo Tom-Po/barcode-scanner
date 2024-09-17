@@ -7,6 +7,7 @@ import { Link } from "expo-router";
 import BarcodeCard from "@/components/cards/BarcodeCard";
 import { useState } from "react";
 import TodoCard from "@/components/cards/TodoCard";
+import { TodoType } from "../store/todoSlice";
 
 const NoProducts = () => (
   <View>
@@ -24,19 +25,28 @@ export default function TabOneScreen() {
   const products = useAppSelector((state: RootState) => state.products.value);
   const todos = useAppSelector((state: RootState) => state.todos.todos);
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedTodo, setSelectedTodo] = useState<TodoType | null>(null);
   // Todo enum or something to sort properly
 
   const handleSelectProduct = (product: string) => {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
 
+  const handleSelectTodo = (todo: TodoType) => {
+    setSelectedTodo(todo.id === selectedTodo?.id ? null : todo);
+  };
+
   return (
     <View style={styles.container}>
       <>
-        <Text style={styles.title}>Liste des todos</Text>
+        <Text style={styles.title}>Notes</Text>
         {todos.map((todo) => (
           <>
-            <TodoCard todo={todo} />
+            <TodoCard
+              todo={todo}
+              onPress={() => handleSelectTodo(todo)}
+              selected={selectedTodo?.id === todo.id}
+            />
           </>
         ))}
       </>
