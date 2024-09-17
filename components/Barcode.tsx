@@ -3,7 +3,9 @@ import {
   BarcodeCreatorView,
   BarcodeFormat,
 } from "react-native-barcode-creator";
-
+export type Barcode = {
+  code: string;
+};
 export default function Barcode(props: { code: string }) {
   return (
     <BarcodeCreatorView

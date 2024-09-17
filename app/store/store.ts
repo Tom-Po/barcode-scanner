@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import productReducer from "./productSlice";
+import todoReducer from "./todoSlice";
 
 export const store = configureStore({
   reducer: {
     products: productReducer,
-    // TODO todolist
+    todos: todoReducer,
+    // TODO user
     // users: usersReducer,
   },
 });

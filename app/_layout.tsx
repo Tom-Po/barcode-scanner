@@ -12,7 +12,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { store } from "./store/store";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,

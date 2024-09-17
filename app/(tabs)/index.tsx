@@ -1,46 +1,68 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 
 import { Text, View } from "@/components/Themed";
 import { useAppSelector } from "../hooks";
-import { RootState } from "../store";
+import { RootState } from "../store/store";
 import { Link } from "expo-router";
-import Barcode from "@/components/Barcode";
+import BarcodeCard from "@/components/cards/BarcodeCard";
+import { useState } from "react";
+import TodoCard from "@/components/cards/TodoCard";
+
+const NoProducts = () => (
+  <View>
+    <Text style={styles.title}>Aucun produit</Text>
+    <View style={styles.separator} />
+    <View style={styles.buttonStyle}>
+      <Link style={styles.link} href="/camera">
+        Scanner des produits
+      </Link>
+    </View>
+  </View>
+);
 
 export default function TabOneScreen() {
   const products = useAppSelector((state: RootState) => state.products.value);
-  console.log(products);
+  const todos = useAppSelector((state: RootState) => state.todos.todos);
+  const [selectedProduct, setSelectedProduct] = useState("");
+  // Todo enum or something to sort properly
+
+  const handleSelectProduct = (product: string) => {
+    setSelectedProduct(product === selectedProduct ? "" : product);
+  };
 
   return (
     <View style={styles.container}>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <View style={styles.productList}>
-        <Text style={styles.title}>Liste des produits</Text>
-        {products.length === 0 && (
-          <View>
-            <Text>Aucun produit</Text>
-            <View style={styles.buttonStyle}>
-              <Link style={styles.link} href="/camera">
-                Scanner des produits
-              </Link>
-            </View>
-          </View>
-        )}
-        {products.map((p) => (
+      <>
+        <Text style={styles.title}>Liste des todos</Text>
+        {todos.map((todo) => (
           <>
-            <Text>{p}</Text>
-            <Barcode code={p} />
+            <TodoCard todo={todo} />
           </>
         ))}
+      </>
+      <View style={styles.separator} />
+      <View style={styles.productList}>
+        <Text style={styles.title}>Liste des produits</Text>
+        {products.length === 0 && <NoProducts />}
+        <ScrollView style={styles.scrollView}>
+          {products.map((p) => (
+            <BarcodeCard
+              barcode={p}
+              onPress={() => handleSelectProduct(p)}
+              selected={selectedProduct === p}
+              key={p}
+            />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: "stretch",
@@ -49,7 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "center",
-    marginBottom: 10,
+    marginVertical: 10,
   },
   separator: {
     height: 1,
@@ -57,6 +79,7 @@ const styles = StyleSheet.create({
   },
   productList: {
     padding: 20,
+    height: "100%",
   },
   productListItem: {
     display: "flex",
