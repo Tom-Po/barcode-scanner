@@ -26,6 +26,15 @@ const initialState = {
       createdAt: new Date(),
       dueDate: new Date(),
     },
+    {
+      id: "YYYYYY test ID",
+      title: "Test todo title",
+      content: "Test todo",
+      color: "green",
+      urgency: "urgent",
+      createdAt: new Date(),
+      dueDate: new Date(),
+    },
   ],
 } satisfies TodoState as TodoState;
 

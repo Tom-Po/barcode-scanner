@@ -6,7 +6,7 @@ import { removeProduct } from "../../app/store/productSlice";
 export default function BarcodeCard(props: {
   barcode: any;
   selected: boolean;
-  onPress: (product: string) => void;
+  onPress: (barcode: string) => void;
 }) {
   const dispatch = useAppDispatch();
   const { barcode, selected, onPress } = props;
@@ -24,7 +24,6 @@ export default function BarcodeCard(props: {
       {selected && (
         <View style={styles.buttonBar}>
           <Button
-            style={styles.barcodeDeleteButton}
             title="Effacer"
             onPress={() => dispatch(removeProduct(barcode))}
           />
