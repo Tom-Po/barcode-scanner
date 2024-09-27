@@ -1,5 +1,6 @@
 import TodoCard from "@/components/cards/TodoCard";
 import TodoForm from "@/components/forms/TodoForm";
+import TodoList from "@/components/lists/todoList";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useAppSelector } from "../hooks";
@@ -20,44 +21,16 @@ export default function Todo() {
     // setLongPressed(todo.id === longPressed?.id ? null : todo);
   };
 
-  const urgentTodos = todos
-    .filter((t) => t.urgency === "urgent")
-    .sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1));
-  const commonTodos = todos
-    .filter((t) => t.urgency === "common")
-    .sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1));
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Notes ({todos.length})</Text>
       <TodoForm />
-      <View style={styles.header}>
-        <Text>Urgent</Text>
-      </View>
-      {urgentTodos.map((todo) => (
-        <TodoCard
-          key={"todo" + todo.id}
-          todo={todo}
-          selected={selectedTodo?.id === todo.id}
-          showDetails={true}
-          openCtxMenu={false}
-          onPress={() => handleSelectTodo(todo)}
-          onLongPress={() => handleLongPressTodo(todo)}
-        />
-      ))}
-      <View style={styles.header}>
-        <Text>A faire</Text>
-      </View>
-      {commonTodos.map((todo) => (
-        <TodoCard
-          key={"todo" + todo.id}
-          todo={todo}
-          selected={selectedTodo?.id === todo.id}
-          showDetails={selectedTodo?.id === todo.id}
-          openCtxMenu={false}
-          onPress={() => handleSelectTodo(todo)}
-          onLongPress={() => handleLongPressTodo(todo)}
-        />
-      ))}
+      <TodoList
+        selectedTodo={selectedTodo}
+        todos={todos}
+        handleLongPressTodo={handleLongPressTodo}
+        handleSelectTodo={handleSelectTodo}
+      />
     </View>
   );
 }
@@ -72,8 +45,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     marginVertical: 10,
-  },
-  header: {
-    paddingHorizontal: 10,
   },
 });

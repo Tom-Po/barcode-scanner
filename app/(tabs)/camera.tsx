@@ -35,6 +35,7 @@ export default function CameraScreen() {
   const codeScanner = useCodeScanner({
     codeTypes: ["ean-13"],
     onCodeScanned: (codes: Code[]) => {
+      const barCodeList = products.map((p) => p.barcode);
       codes.forEach((c: Code) => {
         const { value } = c;
         if (!value || value.length < 13 || products.includes(value)) return;

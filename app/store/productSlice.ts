@@ -1,9 +1,25 @@
+import { fakeEAN13 } from "@/utils/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { uuid } from "expo-modules-core";
 import { RootState } from "./store";
 
 interface ProductState {
   value: string[];
 }
+
+function generateProducts(iteration: number): ProductType[] {
+  let products: ProductType[] = [];
+  for (let i = 0; i < iteration; i++) {
+    products.push({
+      id: uuid.v4(),
+      barcode: fakeEAN13().toString(),
+      name: "Harrys Brioche",
+    });
+  }
+  return products;
+}
+const productsInit = generateProducts(20);
+console.debug(productsInit);
 
 const initialState = {
   value: ["3057067573012"],

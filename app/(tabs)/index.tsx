@@ -8,6 +8,8 @@ import BarcodeCard from "@/components/cards/BarcodeCard";
 import { useState } from "react";
 import TodoCard from "@/components/cards/TodoCard";
 import { TodoType } from "../store/todoSlice";
+import TodoList from "@/components/lists/todoList";
+import { ProductType } from "../store/productSlice";
 
 const NoProducts = () => (
   <View>
@@ -31,7 +33,7 @@ export default function Home() {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
   const handleSelectTodo = (todo: TodoType) => {
-    setSelectedTodo(todo === selectedTodo ? undefined : todo);
+    setSelectedTodo(todo === selectedTodo ? null : todo);
   };
 
   return (
@@ -42,25 +44,19 @@ export default function Home() {
           <Text>Aucune note.</Text>
         ) : (
           <ScrollView style={styles.scrollView}>
-            {todos.map((todo) => {
-              const selected = selectedTodo?.id === todo.id;
-              const showDetails = selected;
-              return (
-                <TodoCard
-                  todo={todo}
-                  onPress={() => handleSelectTodo(todo)}
-                  openCtxMenu={false}
-                  selected={selected}
-                  showDetails={showDetails}
-                  key={String(todo.id)}
-                />
-              );
-            })}
+            <TodoList
+              todos={todos}
+              selectedTodo={selectedTodo}
+              handleSelectTodo={handleSelectTodo}
+              handleLongPressTodo={(todo) => {}}
+            />
           </ScrollView>
         )}
       </View>
       <View style={styles.productList}>
-        <Text style={styles.title}>Produits ({products.length})</Text>
+        <Text style={[styles.title, { color: "white" }]}>
+          Produits ({products.length})
+        </Text>
         {products.length === 0 && <NoProducts />}
         <ScrollView style={styles.scrollView}>
           {products.map((p) => (
@@ -96,7 +92,8 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   productList: {
-    padding: 20,
+    backgroundColor: "#0066CB",
+    paddingHorizontal: 10,
     height: "100%",
   },
   productListItem: {
@@ -107,16 +104,17 @@ const styles = StyleSheet.create({
   },
   link: {
     color: "white",
+    backgroundColor: "#0066CB",
     fontSize: 15,
+    textAlign: "center",
+    padding: 10,
+    margin: 10,
   },
   buttonStyle: {
-    padding: 10,
-    backgroundColor: "blue",
     display: "flex",
-    alignItems: "center",
+    alignItems: "stretch",
   },
   todoList: {
-    height: 200,
-    maxHeight: 200,
+    height: 300,
   },
 });

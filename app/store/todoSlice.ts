@@ -21,7 +21,7 @@ const initialState = {
   todos: [
     {
       id: "XXXXX test ID",
-      title: "Test todo title",
+      title: "C'est pas hyper important",
       content: "Test todo",
       color: "green",
       urgency: "common",
@@ -31,7 +31,7 @@ const initialState = {
     },
     {
       id: "YYYYYY test ID",
-      title: "Test todo title",
+      title: "Mega urgent Brioche pasquier à jeter demain",
       content: "Test todo",
       color: "green",
       urgency: "urgent",
@@ -41,7 +41,7 @@ const initialState = {
     },
     {
       id: "zadzazda test ID",
-      title: "Test todo title",
+      title: "Faire penser à Nico d'acheter à manger",
       content: "Test todo",
       color: "green",
       urgency: "urgent",
