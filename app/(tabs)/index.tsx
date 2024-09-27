@@ -6,6 +6,8 @@ import { RootState } from "../store/store";
 import { Link } from "expo-router";
 import BarcodeCard from "@/components/cards/BarcodeCard";
 import { useState } from "react";
+import TodoCard from "@/components/cards/TodoCard";
+import { TodoType } from "../store/todoSlice";
 
 const NoProducts = () => (
   <View>
@@ -20,18 +22,45 @@ const NoProducts = () => (
 );
 
 export default function Home() {
-  const products = useAppSelector((state: RootState) => state.products.value);
+  const products = useAppSelector((state) => state.products.value);
+  const todos = useAppSelector((state) => state.todos.todos);
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedTodo, setSelectedTodo] = useState<TodoType>();
 
   const handleSelectProduct = (product: string) => {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
+  const handleSelectTodo = (todo: TodoType) => {
+    setSelectedTodo(todo === selectedTodo ? undefined : todo);
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.separator} />
+      <View style={styles.todoList}>
+        <Text style={styles.title}>A faire ({todos.length})</Text>
+        {todos.length === 0 ? (
+          <Text>Aucune note.</Text>
+        ) : (
+          <ScrollView style={styles.scrollView}>
+            {todos.map((todo) => {
+              const selected = selectedTodo?.id === todo.id;
+              const showDetails = selected;
+              return (
+                <TodoCard
+                  todo={todo}
+                  onPress={() => handleSelectTodo(todo)}
+                  openCtxMenu={false}
+                  selected={selected}
+                  showDetails={showDetails}
+                  key={String(todo.id)}
+                />
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
       <View style={styles.productList}>
-        <Text style={styles.title}>Liste des produits</Text>
+        <Text style={styles.title}>Produits ({products.length})</Text>
         {products.length === 0 && <NoProducts />}
         <ScrollView style={styles.scrollView}>
           {products.map((p) => (
@@ -85,5 +114,9 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
     display: "flex",
     alignItems: "center",
+  },
+  todoList: {
+    height: 200,
+    maxHeight: 200,
   },
 });

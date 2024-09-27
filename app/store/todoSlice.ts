@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ProductType } from "./productSlice";
 import { RootState } from "./store";
 export type TodoType = {
-  id: string;
+  id: string | number[];
   title: string;
   // TODO for now
   content: string;
@@ -9,6 +10,7 @@ export type TodoType = {
   dueDate: Date;
   color: "green" | "yellow" | "red";
   urgency: "urgent" | "common";
+  linkedProducts: ProductType[];
 };
 
 interface TodoState {
@@ -25,6 +27,7 @@ const initialState = {
       urgency: "common",
       createdAt: new Date(),
       dueDate: new Date(),
+      linkedProducts: [],
     },
     {
       id: "YYYYYY test ID",
@@ -34,6 +37,17 @@ const initialState = {
       urgency: "urgent",
       createdAt: new Date(),
       dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: "zadzazda test ID",
+      title: "Test todo title",
+      content: "Test todo",
+      color: "green",
+      urgency: "urgent",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
     },
   ],
 } satisfies TodoState as TodoState;

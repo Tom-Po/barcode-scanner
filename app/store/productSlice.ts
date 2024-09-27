@@ -6,8 +6,14 @@ interface ProductState {
 }
 
 const initialState = {
-  value: [],
+  value: ["3057067573012"],
 } satisfies ProductState as ProductState;
+
+export type ProductType = {
+  id: string | number[];
+  name: string;
+  barcode: string;
+};
 
 const productSlice = createSlice({
   name: "products",
