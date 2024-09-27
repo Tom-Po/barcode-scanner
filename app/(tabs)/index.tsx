@@ -1,4 +1,13 @@
-import { StyleSheet, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Platform,
+  UIManager,
+  TouchableOpacity,
+  LayoutAnimation,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { uuid } from "expo-modules-core";
 
 import { Text, View } from "@/components/Themed";
 import { useAppSelector } from "../hooks";
@@ -25,7 +34,7 @@ export default function Home() {
   const todos = useAppSelector((state) => state.todos.todos);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedTodo, setSelectedTodo] = useState<TodoType | null>(null);
-
+  const [showProducts, setShowProducts] = useState(false);
   const handleSelectProduct = (product: string) => {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
@@ -33,9 +42,16 @@ export default function Home() {
     setSelectedTodo(todo === selectedTodo ? null : todo);
   };
 
+  if (
+    Platform.OS === "android" &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.todoList}>
+      <View style={[styles.todoList, showProducts ? styles.reducedTodo : {}]}>
         <Text style={styles.title}>A faire ({todos.length})</Text>
         {todos.length === 0 ? (
           <Text>Aucune note.</Text>
@@ -51,9 +67,17 @@ export default function Home() {
         )}
       </View>
       <View style={styles.productList}>
-        <Text style={[styles.title, { color: "white" }]}>
-          Produits ({products.length})
-        </Text>
+        <TouchableWithoutFeedback
+          delayPressIn={100}
+          onPress={() => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+            setShowProducts(!showProducts);
+          }}
+        >
+          <Text style={[styles.title, { color: "white" }]}>
+            Produits ({products.length})
+          </Text>
+        </TouchableWithoutFeedback>
         {products.length === 0 && <NoProducts />}
         <ScrollView style={styles.scrollView}>
           {products.map((p) => (
@@ -61,7 +85,7 @@ export default function Home() {
               barcode={p}
               onPress={() => handleSelectProduct(p)}
               selected={selectedProduct === p}
-              key={p}
+              key={uuid.v4()}
             />
           ))}
         </ScrollView>
@@ -77,6 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "stretch",
+    overflow: "hidden",
   },
   title: {
     fontSize: 20,
@@ -84,14 +109,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 10,
   },
-  separator: {
-    height: 1,
-    width: "80%",
-  },
   productList: {
     backgroundColor: "#0066CB",
     paddingHorizontal: 10,
     height: "100%",
+    paddingBottom: 50,
   },
   productListItem: {
     display: "flex",
@@ -112,6 +134,10 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
   },
   todoList: {
-    height: 300,
+    height: "75%",
+    marginBottom: 20,
+  },
+  reducedTodo: {
+    height: "0%",
   },
 });

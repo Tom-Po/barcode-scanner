@@ -1,4 +1,3 @@
-import TodoCard from "@/components/cards/TodoCard";
 import TodoForm from "@/components/forms/TodoForm";
 import TodoList from "@/components/lists/todoList";
 import { useState } from "react";

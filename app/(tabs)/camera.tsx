@@ -1,10 +1,4 @@
-import {
-  Button,
-  StyleSheet,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, ScrollView } from "react-native";
 import { useState } from "react";
 import {
   Camera,

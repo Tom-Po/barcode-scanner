@@ -18,6 +18,7 @@ interface TodoState {
   todos: TodoType[];
 }
 
+const today = new Date();
 const initialState = {
   todos: [
     {
@@ -32,17 +33,17 @@ const initialState = {
     },
     {
       id: uuid.v4(),
-      title: "C'est pas hyper important",
+      title: "C'est moyen important",
       content: "Test todo",
       color: "green",
       urgency: "common",
-      createdAt: new Date(),
+      createdAt: new Date(new Date().getDate() - 5),
       dueDate: new Date(),
       linkedProducts: [],
     },
     {
       id: uuid.v4(),
-      title: "C'est pas hyper important",
+      title: "C'est gentillement important",
       content: "Test todo",
       color: "green",
       urgency: "common",
@@ -97,12 +98,12 @@ const initialState = {
       color: "green",
       urgency: "urgent",
       createdAt: new Date(),
-      dueDate: new Date(),
+      dueDate: new Date(today.setDate(today.getDate() - 2)),
       linkedProducts: [],
     },
     {
       id: uuid.v4(),
-      title: "Faire penser à Nico d'acheter à manger",
+      title: "Rappeler à Nico d'acheter à manger",
       content: "Test todo",
       color: "green",
       urgency: "urgent",

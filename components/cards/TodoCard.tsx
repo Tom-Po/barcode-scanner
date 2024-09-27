@@ -1,7 +1,8 @@
 import { Text, StyleSheet, TouchableOpacity, View } from "react-native";
-import { TodoType } from "@/app/store/todoSlice";
+import { removeTodo, TodoType } from "@/app/store/todoSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import dayjs from "dayjs";
+import { useAppDispatch } from "@/app/hooks";
 
 export default function TodoCard(props: {
   todo: TodoType;
@@ -20,34 +21,33 @@ export default function TodoCard(props: {
     onLongPress = () => {},
     openCtxMenu,
   } = props;
-  const { id, title, content, color, createdAt, dueDate, urgency } = todo;
-
+  const { id, title, content, dueDate, urgency } = todo;
+  const dispatch = useAppDispatch();
   return (
-    <TouchableOpacity
-      activeOpacity={1}
+    <View
       style={[
         styles.todoCard,
         selected ? styles.selected : {},
         styles[urgency],
       ]}
-      onPress={() => onPress(id)}
-      onLongPress={onLongPress(todo)}
     >
-      <Text
-        style={[
-          styles.todoTitle,
-          urgency === "urgent" && styles.urgentTitle,
-          selected && { borderRadius: 0 },
-        ]}
+      <TouchableOpacity
+        delayPressIn={100}
+        activeOpacity={1}
+        onPress={() => onPress(id)}
+        onLongPress={onLongPress(todo)}
       >
-        {title}
-      </Text>
-      {showDetails && (
-        <>
-          <View style={styles.todoContentWrapper}>
-            <Text>{content}</Text>
-            <Text>Date due {dayjs(dueDate).format("DD/MM/YY")}</Text>
-          </View>
+        <Text
+          style={[
+            styles.todoTitle,
+            urgency === "urgent" && styles.urgentTitle,
+            selected && { borderRadius: 0 },
+          ]}
+        >
+          {dayjs(dueDate).format("DD/MM")} - {title.slice(0, 35)}
+          {title.length > 30 && "..."}
+        </Text>
+        {!selected && (
           <View style={styles.pill}>
             <FontAwesome
               name="bell"
@@ -57,16 +57,34 @@ export default function TodoCard(props: {
               style={styles.pill}
             />
           </View>
+        )}
+      </TouchableOpacity>
+      {showDetails && selected && (
+        <>
+          <View style={styles.todoContentWrapper}>
+            <Text>{content}</Text>
+          </View>
+
+          <TouchableOpacity
+            style={[styles.pill, { right: 12, top: 5 }]}
+            onPress={() => dispatch(removeTodo(todo))}
+          >
+            <FontAwesome
+              name="close"
+              size={20}
+              opacity={selected ? 0.8 : 0.5}
+              color={urgency === "urgent" ? "white" : "orange"}
+            />
+          </TouchableOpacity>
         </>
       )}
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   todoCard: {
     marginVertical: 5,
-    marginHorizontal: 10,
     backgroundColor: "white",
     position: "relative",
     opacity: 0.65,
@@ -88,10 +106,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   urgent: {
-    borderColor: "red",
+    borderColor: "#FE6632",
   },
   urgentTitle: {
-    backgroundColor: "red",
+    backgroundColor: "#FE6632",
     color: "white",
   },
   common: {

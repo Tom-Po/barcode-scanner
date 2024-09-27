@@ -16,10 +16,7 @@ export default function TodoList(props: {
     .filter((t) => t.urgency === "common")
     .sort((a, b) => (a.dueDate < b.dueDate ? 1 : -1));
   return (
-    <>
-      <View style={styles.header}>
-        <Text>Urgent</Text>
-      </View>
+    <View style={styles.container}>
       {urgentTodos.map((todo) => (
         <TodoCard
           key={"todo" + todo.id}
@@ -31,13 +28,10 @@ export default function TodoList(props: {
           onLongPress={() => handleLongPressTodo(todo)}
         />
       ))}
-      <View style={styles.header}>
-        <Text>A faire</Text>
-      </View>
-      {commonTodos.map((todo) => (
+      {commonTodos.map((todo, index) => (
         <TodoCard
           key={"todo" + todo.id}
-          todo={todo}
+          todo={{ ...todo, title: `${todo.title} (${index + 1})` }}
           selected={selectedTodo?.id === todo.id}
           showDetails={selectedTodo?.id === todo.id}
           openCtxMenu={false}
@@ -45,12 +39,15 @@ export default function TodoList(props: {
           onLongPress={() => handleLongPressTodo(todo)}
         />
       ))}
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
+    paddingHorizontal: 10,
+  },
+  container: {
     paddingHorizontal: 10,
   },
 });

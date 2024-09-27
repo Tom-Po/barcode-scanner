@@ -20,9 +20,10 @@ function generateProducts(iteration: number): ProductType[] {
 }
 const productsInit = generateProducts(20);
 console.debug(productsInit);
+const productsInitEANs = productsInit.map((p) => p.barcode);
 
 const initialState = {
-  products: ["3057067573012"],
+  products: ["3057067573012", "3057067573012", "3057067573012"],
 } satisfies ProductState as ProductState;
 
 export type ProductType = {
