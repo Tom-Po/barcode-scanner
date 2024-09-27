@@ -4,7 +4,7 @@ import { uuid } from "expo-modules-core";
 import { RootState } from "./store";
 
 interface ProductState {
-  value: string[];
+  products: string[];
 }
 
 function generateProducts(iteration: number): ProductType[] {
@@ -22,7 +22,7 @@ const productsInit = generateProducts(20);
 console.debug(productsInit);
 
 const initialState = {
-  value: ["3057067573012"],
+  products: ["3057067573012"],
 } satisfies ProductState as ProductState;
 
 export type ProductType = {
@@ -36,10 +36,10 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     addProduct(state, action: PayloadAction<string>) {
-      state.value = [...state.value, action.payload];
+      state.products = [...state.products, action.payload];
     },
     removeProduct(state, action: PayloadAction<string>) {
-      state.value = [...state.value.filter((p) => p !== action.payload)];
+      state.products = [...state.products.filter((p) => p !== action.payload)];
     },
   },
 });

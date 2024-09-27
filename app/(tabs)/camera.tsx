@@ -26,7 +26,7 @@ export default function CameraScreen() {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
 
-  const products = useAppSelector((state) => state.products.value);
+  const products = useAppSelector((state) => state.products.products);
   const dispatch = useDispatch();
 
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -35,7 +35,7 @@ export default function CameraScreen() {
   const codeScanner = useCodeScanner({
     codeTypes: ["ean-13"],
     onCodeScanned: (codes: Code[]) => {
-      const barCodeList = products.map((p) => p.barcode);
+      // const barCodeList = products.map((p) => p.barcode);
       codes.forEach((c: Code) => {
         const { value } = c;
         if (!value || value.length < 13 || products.includes(value)) return;

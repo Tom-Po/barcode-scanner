@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ProductType } from "./productSlice";
 import { RootState } from "./store";
+import { uuid } from "expo-modules-core";
 export type TodoType = {
   id: string | number[];
   title: string;
@@ -20,7 +21,7 @@ interface TodoState {
 const initialState = {
   todos: [
     {
-      id: "XXXXX test ID",
+      id: uuid.v4(),
       title: "C'est pas hyper important",
       content: "Test todo",
       color: "green",
@@ -30,7 +31,67 @@ const initialState = {
       linkedProducts: [],
     },
     {
-      id: "YYYYYY test ID",
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
+      title: "C'est pas hyper important",
+      content: "Test todo",
+      color: "green",
+      urgency: "common",
+      createdAt: new Date(),
+      dueDate: new Date(),
+      linkedProducts: [],
+    },
+    {
+      id: uuid.v4(),
       title: "Mega urgent Brioche pasquier à jeter demain",
       content: "Test todo",
       color: "green",
@@ -40,7 +101,7 @@ const initialState = {
       linkedProducts: [],
     },
     {
-      id: "zadzazda test ID",
+      id: uuid.v4(),
       title: "Faire penser à Nico d'acheter à manger",
       content: "Test todo",
       color: "green",

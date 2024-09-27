@@ -2,14 +2,11 @@ import { StyleSheet, ScrollView } from "react-native";
 
 import { Text, View } from "@/components/Themed";
 import { useAppSelector } from "../hooks";
-import { RootState } from "../store/store";
 import { Link } from "expo-router";
 import BarcodeCard from "@/components/cards/BarcodeCard";
 import { useState } from "react";
-import TodoCard from "@/components/cards/TodoCard";
 import { TodoType } from "../store/todoSlice";
 import TodoList from "@/components/lists/todoList";
-import { ProductType } from "../store/productSlice";
 
 const NoProducts = () => (
   <View>
@@ -24,15 +21,15 @@ const NoProducts = () => (
 );
 
 export default function Home() {
-  const products = useAppSelector((state) => state.products.value);
+  const products = useAppSelector((state) => state.products.products);
   const todos = useAppSelector((state) => state.todos.todos);
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [selectedTodo, setSelectedTodo] = useState<TodoType>();
+  const [selectedTodo, setSelectedTodo] = useState<TodoType | null>(null);
 
   const handleSelectProduct = (product: string) => {
     setSelectedProduct(product === selectedProduct ? "" : product);
   };
-  const handleSelectTodo = (todo: TodoType) => {
+  const handleSelectTodo = (todo: TodoType | null) => {
     setSelectedTodo(todo === selectedTodo ? null : todo);
   };
 
