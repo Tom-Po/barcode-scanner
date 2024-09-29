@@ -3,7 +3,6 @@ import {
   ScrollView,
   Platform,
   UIManager,
-  TouchableOpacity,
   LayoutAnimation,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -20,7 +19,7 @@ import TodoList from "@/components/lists/todoList";
 const NoProducts = () => (
   <View>
     <Text style={styles.title}>Aucun produit</Text>
-    <View style={styles.separator} />
+
     <View style={styles.buttonStyle}>
       <Link style={styles.link} href="/camera">
         Scanner des produits
@@ -108,6 +107,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     marginVertical: 10,
+    width: "100%",
+    textAlign: "center",
   },
   productList: {
     backgroundColor: "#0066CB",
