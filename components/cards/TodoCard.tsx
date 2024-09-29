@@ -24,29 +24,26 @@ export default function TodoCard(props: {
     openCtxMenu,
   } = props;
   const { id, title, content, dueDate, urgency, linkedProducts } = todo;
-  const dispatch = useAppDispatch;
+  const dispatch = useAppDispatch();
   if (selected && showMenu) {
     return (
-      <>
-        <TouchableOpacity
-          style={
-            (StyleSheet.absoluteFill,
-            {
-              backgroundColor: "#F00",
-              height: 50,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            })
-          }
-        >
-          {/* <TouchableOpacity onPress={() => dispatch(removeTodo(todo))}> */}
-          <TouchableOpacity onPress={() => {}}>
-            <FontAwesome name="trash" size={30} color={"white"} />
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </>
+      <TouchableOpacity
+        onPress={() => dispatch(removeTodo(todo))}
+        style={
+          (StyleSheet.absoluteFill,
+          {
+            backgroundColor: "#F00",
+            height: 50,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          })
+        }
+      >
+        {/* <TouchableOpacity  */}
+        <FontAwesome name="trash" size={30} color={"white"} />
+      </TouchableOpacity>
     );
   }
   return (
