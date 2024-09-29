@@ -3,6 +3,7 @@ import { removeTodo, TodoType } from "@/app/store/todoSlice";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import dayjs from "dayjs";
 import { useAppDispatch } from "@/app/hooks";
+import { useState } from "react";
 
 export default function TodoCard(props: {
   todo: TodoType;
@@ -13,6 +14,7 @@ export default function TodoCard(props: {
   onLongPress?: any;
   openCtxMenu: boolean;
 }) {
+  const [showMenu, setShowMenu] = useState(false);
   const {
     todo,
     selected,
@@ -22,7 +24,31 @@ export default function TodoCard(props: {
     openCtxMenu,
   } = props;
   const { id, title, content, dueDate, urgency, linkedProducts } = todo;
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch;
+  if (selected && showMenu) {
+    return (
+      <>
+        <TouchableOpacity
+          style={
+            (StyleSheet.absoluteFill,
+            {
+              backgroundColor: "#F00",
+              height: 50,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            })
+          }
+        >
+          {/* <TouchableOpacity onPress={() => dispatch(removeTodo(todo))}> */}
+          <TouchableOpacity onPress={() => {}}>
+            <FontAwesome name="trash" size={30} color={"white"} />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </>
+    );
+  }
   return (
     <View
       style={[
@@ -34,8 +60,11 @@ export default function TodoCard(props: {
       <TouchableOpacity
         delayPressIn={100}
         activeOpacity={1}
-        onPress={() => onPress(id)}
-        onLongPress={onLongPress(todo)}
+        onPress={() => {
+          setShowMenu(false);
+          onPress(id);
+        }}
+        onLongPress={() => setShowMenu((m) => !m)}
       >
         <Text
           style={[
@@ -47,6 +76,7 @@ export default function TodoCard(props: {
           {dayjs(dueDate).format("DD/MM")} - {title.slice(0, 35)}
           {title.length > 30 && "..."}
         </Text>
+
         {!selected && (
           <View style={styles.pill}>
             <FontAwesome
@@ -60,29 +90,15 @@ export default function TodoCard(props: {
         )}
       </TouchableOpacity>
       {showDetails && selected && (
-        <>
-          <View style={styles.todoContentWrapper}>
-            <Text>{content}</Text>
+        <View style={styles.todoContentWrapper}>
+          <Text>{content}</Text>
 
-            {linkedProducts.length ? (
-              <Text>{linkedProducts.map((p) => p.name + " - " + p.code)}</Text>
-            ) : (
-              <></>
-            )}
-          </View>
-
-          <TouchableOpacity
-            style={[styles.pill, { right: 12, top: 5 }]}
-            onPress={() => dispatch(removeTodo(todo))}
-          >
-            <FontAwesome
-              name="close"
-              size={20}
-              opacity={selected ? 0.8 : 0.5}
-              color={urgency === "urgent" ? "white" : "orange"}
-            />
-          </TouchableOpacity>
-        </>
+          {linkedProducts.length ? (
+            <Text>{linkedProducts.map((p) => p.name + " - " + p.code)}</Text>
+          ) : (
+            <></>
+          )}
+        </View>
       )}
     </View>
   );

@@ -34,7 +34,7 @@ const initialState = {
     {
       id: uuid.v4(),
       title: "C'est moyen important",
-      content: "Test todo",
+      content: "dmezlkzm ez mlkze dzkzmlkd melkd mlkzd mlezkdmlkdml kzmd ko",
       color: "green",
       urgency: "common",
       createdAt: new Date(new Date().getDate() - 5),
