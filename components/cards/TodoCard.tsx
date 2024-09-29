@@ -21,7 +21,7 @@ export default function TodoCard(props: {
     onLongPress = () => {},
     openCtxMenu,
   } = props;
-  const { id, title, content, dueDate, urgency } = todo;
+  const { id, title, content, dueDate, urgency, linkedProducts } = todo;
   const dispatch = useAppDispatch();
   return (
     <View
@@ -63,6 +63,12 @@ export default function TodoCard(props: {
         <>
           <View style={styles.todoContentWrapper}>
             <Text>{content}</Text>
+
+            {linkedProducts.length ? (
+              <Text>{linkedProducts.map((p) => p.name + " - " + p.code)}</Text>
+            ) : (
+              <></>
+            )}
           </View>
 
           <TouchableOpacity

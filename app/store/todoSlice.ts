@@ -11,7 +11,7 @@ export type TodoType = {
   dueDate: Date;
   color: "green" | "yellow" | "red";
   urgency: "urgent" | "common";
-  linkedProducts: ProductType[];
+  linkedProducts: LinkedProduct[];
 };
 
 interface TodoState {
@@ -109,10 +109,22 @@ const initialState = {
       urgency: "urgent",
       createdAt: new Date(),
       dueDate: new Date(),
-      linkedProducts: [],
+      linkedProducts: [
+        {
+          id: "0001",
+          code: "1223333333331",
+          name: "Sandwich",
+        },
+      ],
     },
   ],
 } satisfies TodoState as TodoState;
+
+export type LinkedProduct = {
+  id: string;
+  code: string;
+  name: string;
+};
 
 const todoSlice = createSlice({
   name: "todos",
@@ -125,6 +137,21 @@ const todoSlice = createSlice({
       state.todos = [
         ...state.todos.filter((todo) => todo.id !== action.payload.id),
       ];
+    },
+    linkProduct(
+      state,
+      action: PayloadAction<{ id: string; product: LinkedProduct }>
+    ) {
+      const todoIndex = state.todos.findIndex(
+        (t) => t.id === action.payload.id
+      );
+      state.todos = state.todos.splice(todoIndex, 1, {
+        ...state.todos[todoIndex],
+        linkedProducts: [
+          ...state.todos[todoIndex].linkedProducts,
+          action.payload.product,
+        ],
+      });
     },
   },
 });
